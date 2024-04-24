@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TutorGPT</title>
+    <style>
+      body {
+        background-color: black;
+      }
+      h1 {
+        font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+        color: white; /* Set text color to white */
+        font-size: 40px; /* Increase font size to 36 pixels */
+        position: absolute; /* Position the text absolutely */
+        top: 15%; /* Move the text to the middle vertically */
+        left: 50%; /* Move the text to the middle horizontally */
+        transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+      }
+      h2 {
+        font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+        color: white; /* Set text color to white */
+        font-size: 30px; /* Increase font size to 36 pixels */
+        position: absolute; /* Position the text absolutely */
+        font-weight: 100; /* Set font weight to thin (300) */
+        top: 1%; /* Move the text to the middle vertically */
+        left: 5%; /* Move the text to the middle horizontally */
+        transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+      }
+      h3 {
+        font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+        color: white; /* Set text color to white */
+        font-size: 25px; /* Increase font size to 36 pixels */
+        position: absolute; /* Position the text absolutely */
+        font-weight: 100; /* Set font weight to thin (300) */
+        top: 25%; /* Move the text to the middle vertically */
+        left: 50%; /* Move the text to the middle horizontally */
+        transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+      }
+      h4 {
+        font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+        color: white; /* Set text color to white */
+        font-size: 25px; /* Increase font size to 36 pixels */
+        position: absolute; /* Position the text absolutely */
+        font-weight: 100; /* Set font weight to thin (300) */
+        top: 50%; /* Move the text to the middle vertically */
+        left: 50%; /* Move the text to the middle horizontally */
+        transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+      }
+      .myButton {
+            background-color: #f11616;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 23px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            position: absolute;
+            top: 500px; /* Adjust the top position */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%);
+        }
+        .myImage {
+            position: absolute;
+            top: 14px; /* Adjust the top position */
+            left: 11%; /* Center horizontally */
+            width: 50px; /* Set the width of the image */
+            height: auto; /* Maintain aspect ratio */
+            transform: translateX(-50%);
+        }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to TutorGPT</h1>
+    <h2>TutorGPT</h2>
+    <h3>Say goodbye to one-size-fits-all learning approaches and hello to a dynamic, adaptive learning experience with smart tutor, TutorGPT.</h3>
+    <h4>Let's get started with asking few questions!</h4>
+    <button type="button" class="myButton" onclick="showSpinnerAndNavigate()">Get Started</button>
+    <img class="myImage" src="img1.jpeg" alt="Description of the image">
+    <div id="spinner" style="display: none;">
+      <div class="spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <script>
+      // Function to show the spinner and navigate to the next page
+      function showSpinnerAndNavigate() {
+        // Show the spinner
+        document.getElementById('spinner').style.display = 'block';
+        
+        // Set a timeout to navigate to the next page after a short delay
+        setTimeout(function() {
+          window.location.href = 'frontend_main2.html';
+        }, 1000); // Adjust the delay (in milliseconds) as needed
+      }
+    </script>
+
+  </body>
+</html>

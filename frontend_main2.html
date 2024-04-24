@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TutorGPT</title>
+    <style>
+        body {
+            background-color: black;
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+        }
+        .container {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #question {
+            font-size: 20px;
+        }
+        #result {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .myButton {
+            background-color: #f11616;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            top: 70%; 
+            left: 50%; 
+            cursor: pointer;
+            font-size: 23px;
+            position: fixed; /* Set position to fixed */
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+        }
+        h1 {
+            font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+            color: white; /* Set text color to white */
+            font-size: 30px; /* Increase font size to 36 pixels */
+            position: absolute; /* Position the text absolutely */
+            font-weight: 100; /* Set font weight to thin (300) */
+            top: 1%; /* Move the text to the middle vertically */
+            left: 5%; /* Move the text to the middle horizontally */
+            transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+        }
+        h2 {
+            font-family: 'Open Sans', sans-serif; /* Change font to Arial or any other desired font */
+            color: white; /* Set text color to white */
+            font-size: 25px; /* Increase font size to 36 pixels */
+            position: absolute; /* Position the text absolutely */
+            font-weight: 100; /* Set font weight to thin (300) */
+            top: 14%; /* Move the text to the middle vertically */
+            left: 22%; /* Move the text to the middle horizontally */
+            transform: translate(-50%, -50%); /* Center the text horizontally and vertically */
+        }
+        /* Modified spinner CSS */
+        .spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid transparent;
+            border-top-color: red;
+            position: absolute;
+            top: 50%; /* Adjust the distance from the top */
+            left: 50%; /* Adjust the distance from the left */
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .myImage {
+            position: absolute;
+            top: 14px; /* Adjust the top position */
+            left: 11%; /* Center horizontally */
+            width: 50px; /* Set the width of the image */
+            height: auto; /* Maintain aspect ratio */
+            transform: translateX(-50%);
+        }
+        /* Style for the question display */
+        #question {
+            margin-top: 123px; /* Adjust the distance from the top */
+            margin-left: 237px; /* Adjust the left margin to shift the text to the right */
+            font-size: 24px; /* Adjust the font size */
+            text-align: left; /* Center the text horizontally */
+            font-size: 24px; /* Adjust the font size */
+            /* Add other styles as needed */
+        }
+        #answer {
+            width: 300px; /* Set the width of the input */
+            height: 35px; /* Set the height of the input */
+            margin-top: 10px; /* Adjust the distance from the top */
+            margin-left: auto; /* Align the input to the center horizontally */
+            margin-right: auto;
+            display: block; /* Make the input a block element */
+            position: absolute; /* Set position to absolute */
+            top: 120px; /* Adjust the distance from the top */
+            left: 50%; /* Align the input horizontally to the center */
+            transform: translateX(-50%); /* Center the input horizontally */
+            /* Add other input styles as needed */
+        }
+        #answerHelpBlock {
+            position: absolute; /* Set position to absolute */
+            top: 200px; /* Adjust the distance from the top */
+            left: 50.5%; /* Align the text horizontally to the center */
+            transform: translateX(-50%); /* Center the text horizontally */
+            /* Add other text styles as needed */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #result {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>TutorGPT</h1>
+    <img class="myImage" src="frontend_img1.jpeg" alt="Description of the image">
+    <h2>Question: </h2>
+
+    <div class="container">
+        <p id="question">Loading...</p>
+        <!-- Answer input textbox -->
+        <input type="text" id="answer" class="form-control" placeholder="Enter your answer" aria-describedby="answerHelpBlock">
+        
+        <!-- Answer help text -->
+        <div id="answerHelpBlock" class="form-text">
+            (Please round off to the nearest integer, enter in the input box and press enter.)
+        </div>
+        <div class="spinner" id="spinner"></div>
+        <button class="myButton" id="refreshButton">Refresh</button>
+        
+        <!-- Result container -->
+        <div class="result-container">
+            <div id="result"></div>
+            
+            <!-- Explanation container -->
+            <div id="explanation" style="display:none;">
+                <h3>Explanation:</h3>
+                <p id="explanationText"></p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            { question: "A car travels at a speed of 60 miles per hour. How far will it travel in 3 hours?", answer: "180" },
+            { question: "A rectangular garden has a length of 20 meters and a width of 10 meters. What is the area of the garden?", answer: "200" },
+            { question: "If a store sells a shirt for $25 and a pair of pants for $35, and a customer buys one of each, how much will they spend in total?", answer: "60" },
+            { question: "Jane bought 3 packs of pencils, each containing 12 pencils. If she gives away 5 pencils to each of her 4 friends, how many pencils will she have left?", answer: "16" },
+            { question: "A rectangle has a perimeter of 60 centimeters. If its length is 5 centimeters longer than its width, find the length of the rectangle.", answer: "18" },
+            { question: "A recipe for making cookies calls for 2 cups of flour. If you want to make half the recipe, how many cups of flour do you need?", answer: "1" },
+            { question: "John invested $5000 in a savings account with an annual interest rate of 4%. How much interest will he earn after 2 years?", answer: "400" },
+            { question: "A school has 240 students. If 60% of them are girls, how many boys are there in the school?", answer: "96" },
+            { question: "A train travels at an average speed of 80 kilometers per hour. How long will it take to travel 320 kilometers?", answer: "4" },
+            { question: "The sum of two consecutive integers is 55. Find the smaller integer.", answer: "27" }
+        ];
+
+        function showSpinner() {
+            const spinnerElement = document.getElementById("spinner");
+            if (spinnerElement) {
+                spinnerElement.style.display = "block";
+                setTimeout(() => {
+                    spinnerElement.style.display = "none";
+                    generateRandomQuestion(); // After 1 second, show the question
+                }, 1000); // Show spinner for 1 second
+            } else {
+                console.error("Spinner element not found!");
+            }
+        }
+    
+        function generateRandomQuestion() {
+            const randomNumber = Math.floor(Math.random() * questions.length);
+            const randomQuestion = questions[randomNumber];
+            const questionElement = document.getElementById("question");
+            if (questionElement) {
+                questionElement.textContent = randomQuestion.question;
+                document.getElementById("answerInput").value = ""; 
+            } else {
+                console.error("Question element not found!");
+            }
+        }
+    
+        async function checkAnswer() {
+            const userAnswer = document.getElementById("answer").value.trim();
+            const currentQuestion = document.getElementById("question").textContent.trim();
+            const questionObj = questions.find(q => q.question === currentQuestion);
+            const resultElement = document.getElementById("result");
+            
+            if (questionObj) {
+                if (userAnswer === questionObj.answer) {
+                    resultElement.textContent = "Correct!";
+                    resultElement.style.color = "green";
+                } else {
+                    resultElement.textContent = "Incorrect!";
+                    resultElement.style.color = "red";
+                    
+                    try {
+                        const response = await fetch('http://127.0.0.1:8000/get_help h', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ question: currentQuestion })
+                        });
+        
+                        if (response.ok) {
+                            const data = await response.json();
+                            console.log("Explanation from backend:", data.explanation); // Debug
+                            alert(data.explanation);  // Display the explanation
+                        } else {
+                            console.error('Failed to fetch explanation:', response.status);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching explanation:', error);
+                    }
+                }
+            } else {
+                console.error("Question not found!");
+            }
+        }
+        
+    
+           
+        // Add event listener to the refresh button to clear the result text
+        document.getElementById("refreshButton").addEventListener("click", function() {
+            document.getElementById("result").textContent = ""; // Clear the result text
+            answer.value = ""; // Clear answer input field
+            generateRandomQuestion(); // Generate a new question
+        });
+        
+        // Call generateRandomQuestion function when the page loads
+        window.addEventListener("load", () => {
+            showSpinner(); // Call showSpinner initially
+        });
+
+        // // Add event listener to the refresh button
+        // document.getElementById("refreshButton").addEventListener("click", () => {
+        //     showSpinner(); // Call showSpinner when refresh button is clicked
+        // });
+
+        // Add event listener to the answer input field to check answer on Enter key press
+        document.getElementById("answer").addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                checkAnswer(); // Call checkAnswer when Enter key is pressed
+            }
+        });
+    </script>
+
+
+</body>
+</html>

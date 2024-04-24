@@ -1,1 +1,1 @@
-# GoogleGirlHackathon
+# Google-Girl-Hackathon
